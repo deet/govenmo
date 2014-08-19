@@ -1,8 +1,12 @@
 # govenmo
 
-A Venmo API client in Golang.
+A Venmo API client library in Golang.
 
-See the Venmo API documentation here at https://developer.venmo.com/docs/oauth
+See the Venmo API documentation here at https://developer.venmo.com/docs/oauth.
+
+See README for usage or GoDoc.
+
+<a href="https://godoc.org/github.com/deet/govenmo"><img src="https://godoc.org/github.com/deet/govenmo?status.svg" alt="GoDoc"></a>
 
 ## Concepts
 
@@ -35,28 +39,49 @@ Obtaining the token is not included in the library but is easy to implement.
 	// OR target.Phone = "..."
 	// OR target.User.Id = "..."
 
-	sentPayment, err := account.Pay(target, 5.27, "Thanks for the govenmo library!", "public")
+	sentPayment, err := account.PayOrCharge(target, 5.27, "Thanks for the govenmo library!", "public")
 	if err != nil {
 		// Handle error ...
 	}
 
+### Refresh single payment
+
+	payment := &Payment{}
+	payment.Id = "1111111111111111111"
+	err = account.RefreshPayment(payment)
+	if err != nil {
+		// Handle error ...
+	}
+
+### Fetch multiple payments
+
+	var updatedSince time.Time
+	payments, err := account.PaymentsSince(updatedSince)
+	if err != nil {
+		// Handle error ...
+	}
+	for _, payment := range payments {
+		// Each payment is an instance of Payment.
+		log.Println("Found payment:", payment.Note)
+	}
+
 ### Complete a charge
 
-	updatedPayment, err := account.Complete("paymentID", "approve")
+	updatedPayment, err := account.CompletePayment("paymentID", "approve")
 	if err != nil {
 		// Handle error ...
 	}
 
 ### Deny a charge
 
-	updatedPayment, err := account.Complete("paymentID", "deny")
+	updatedPayment, err := account.CompletePayment("paymentID", "deny")
 	if err != nil {
 		// Handle error ...
 	}
 
 ### Cancel a charge
 
-	updatedPayment, err := account.Complete("paymentID", "cancel")
+	updatedPayment, err := account.CompletePayment("paymentID", "cancel")
 	if err != nil {
 		// Handle error ...
 	}
@@ -69,7 +94,7 @@ Obtaining the token is not included in the library but is easy to implement.
 	}
 
 	for _, friend := range friends {
-		// Each friend is an Account with the User fields populated
+		// Each friend is an instance of User.
 		log.Println("Found friend:", friend.DisplayName)
 	}
 
@@ -82,7 +107,7 @@ Enable Venmo sandbox mode. Note that the Venmo sandbox doesn't behave exactly li
 Use local sandbox
 
 	// In your client
-	govenmo.Environment = "local"
+	govenmo.Environment = "local_sandbox"
 
 Set a maximum payment or charge amount. (Why?... because when you first start using the production API you probably don't want a bug in your code to be able to send thousands of dollars.)
 
@@ -95,7 +120,9 @@ Enable logging
 
 ### Run the local sandbox
 
-The package local_sandbox mimics the real Venmo sandbox so that you don't have to hit it as much during testing. It returns the sandbox's hardcoded POST /payments responses and proxies other requests to the real sandbox.
+The package local_sandbox mimics the real Venmo sandbox so that you don't have to hit it as much during testing. 
+
+Local sandbox returns the sandbox's hardcoded POST /payments responses. It also mimics GET /me and GET /payments/1111111111111111111.  Other requests are proxied to the real sandbox and would require a valid token.
 
 Like the real sandbox, it's not a replcate of the Venmo production API and the values returned in the responses might not be the same as what you send in your request.
 
@@ -103,8 +130,6 @@ Like the real sandbox, it's not a replcate of the Venmo production API and the v
 	go run main.go
 
 The local sandbox must be running for the (limited) tests.
-
-Local sandbox responses deviate from real sandbox responses in the error checking is not as strict and that some bugs have been fixed to match production API better.
 
 ## License
 

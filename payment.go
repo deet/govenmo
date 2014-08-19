@@ -155,7 +155,7 @@ func (a *Account) PayOrCharge(target Target, amount float64, note string, audien
 	return
 }
 
-// CompletePayment allows you to 'complete', 'deny', or 'cancel' a pending charge request.
+// CompletePayment allows you to 'approve', 'deny', or 'cancel' a pending charge request.
 func (a *Account) CompletePayment(paymentId, action string) (updatedPayment Payment, err error) {
 	logger.Println("Completing venmo payment", paymentId, "with action", action)
 
