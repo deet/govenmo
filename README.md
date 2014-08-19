@@ -10,7 +10,7 @@ See README for usage or GoDoc.
 
 ## Concepts
 
-Since all Venmo API requests must be authenticated using a user's Oauth token, the basic object is the Account, which holds information for the authenticated user and tokens.
+Since all Venmo API requests must be authenticated using a user's OAuth token, the basic object is the Account, which holds information for the authenticated user and tokens.
 
 The library assumes you have already obtained a user access token somehow, for example using the OAuth flow. Helpers for completing the OAuth flow might be added in the future.
 
@@ -124,7 +124,7 @@ The package local_sandbox mimics the real Venmo sandbox so that you don't have t
 
 Local sandbox returns the sandbox's hardcoded POST /payments responses. It also mimics GET /me and GET /payments/1111111111111111111.  Other requests are proxied to the real sandbox and would require a valid token.
 
-Like the real sandbox, it's not a replcate of the Venmo production API and the values returned in the responses might not be the same as what you send in your request.
+Like the real sandbox, it's not a replica of the Venmo production API and the values returned in the responses might not be the same as what you send in your request.
 
 	cd local_sandbox
 	go run main.go
