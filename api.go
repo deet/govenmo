@@ -5,7 +5,7 @@ type userGetResponse struct {
 }
 
 type paymentPostData struct {
-	Balance float64 `json:",string"`
+	Balance float64 `json:"balance"`
 	Payment Payment
 }
 
