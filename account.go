@@ -15,7 +15,7 @@ import (
 type Account struct {
 	AccessToken  string  `json:"access_token"`
 	RefreshToken string  `json:"refresh_token"`
-	Balance      float64 `json:"balance,string"`
+	Balance      float64 `json:"balance"`
 	ExpiresIn    int64   `json:"expires_in"`
 	TokenType    string  `json:"bearer"`
 	User         `json:"user"`
